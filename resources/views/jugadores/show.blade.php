@@ -4,8 +4,9 @@
 
 
 <x-jugador
-    :nom="$jugador['nom']"
-    :equip="$jugador['equip']"
-    :posicio="$jugador['posicio']"
+    :nom="$jugador->nom"
+    :equip="$jugador->equip"
+    :posicio="$jugador->posicio"
 />
+
 @endsection

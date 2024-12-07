@@ -2,22 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Jugador;
 use Illuminate\Http\Request;
 
 class JugadoresController extends Controller
 {
-    protected $jugadores = [
-        ['nom' => 'Alexia Putellas', 'equip' => 'Barça Femení', 'posicio' => 'Migcampista'],
-        ['nom' => 'Esther González', 'equip' => 'Atlètic de Madrid', 'posicio' => 'Davantera'],
-        ['nom' => 'Misa Rodríguez', 'equip' => 'Real Madrid Femení', 'posicio' => 'Portera'],
-    ];
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $jugadores = $this->jugadores;
+        $jugadores = Jugador::paginate(10);
         return view('jugadores.index', compact('jugadores'));
     }
 
@@ -26,7 +21,7 @@ class JugadoresController extends Controller
      */
     public function create()
     {
-        //
+        return view('jugadores.create');
     }
 
     /**
@@ -34,39 +29,56 @@ class JugadoresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'nom' => 'required|string',
+            'equip' => 'required|string',
+            'posicio' => 'required|string',
+        ]);
+
+        Jugador::create($validated);
+
+        return redirect()->route('jugadores.index')->with('success', 'Jugador creat correctament!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Jugador $jugador)
     {
-        $jugador = $this->jugadores[$id];
         return view('jugadores.show', compact('jugador'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Jugador $jugador)
     {
-        //
+        return view('jugadores.edit', compact('jugador'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Jugador $jugador)
     {
-        //
+        $validated = $request->validate([
+            'nom' => 'required|string',
+            'equip' => 'required|string',
+            'posicio' => 'required|string',
+        ]);
+
+        $jugador->update($validated);
+
+        return redirect()->route('jugadores.index')->with('success', 'Jugador actualitzat correctament!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Jugador $jugador)
     {
-        //
+        $jugador->delete();
+
+        return redirect()->route('jugadores.index')->with('success', 'Jugador esborrat correctament!');
     }
 }

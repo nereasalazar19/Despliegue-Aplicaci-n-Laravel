@@ -31,8 +31,8 @@ class EstadiController extends Controller
      */
     public function store(Request $request) {
         $validated = $request->validate([
-            'nom' => 'required|unique:equips',
-            'ciutat' => 'required|exists:estadis,id',
+            'nom' => 'required|unique:estadis',
+            'ciutat' => 'required|string',
             'capacitat' => 'required|integer|min:0',
             
         ]);
@@ -54,7 +54,7 @@ class EstadiController extends Controller
      */
     public function edit(Estadi $estadi) {
         $estadis = Estadi::all();
-        return view('estadis.edit', compact('estadis', 'equip'));
+        return view('estadis.edit', compact('estadi'));
     }
 
     /**
@@ -62,8 +62,8 @@ class EstadiController extends Controller
      */
     public function update(Request $request, $id) {
         $validated = $request->validate([
-            'nom' => 'required|unique:equips,nom,'.$id,
-            'ciutat' => 'required|exists:estadis,id',
+            'nom' => 'required|unique:estadis,nom,' . $id,
+            'ciutat' => 'required|string',
             'capacitat' => 'required|integer|min:0',
             
         ]);
@@ -77,6 +77,6 @@ class EstadiController extends Controller
      */
     public function destroy(Estadi $estadi) {
         $estadi->delete();
-        return redirect()->route('estadi.index')->with('success', 'Estadi esborrat correctament!');
+        return redirect()->route('estadis.index')->with('success', 'Estadi esborrat correctament!');
     }
 }

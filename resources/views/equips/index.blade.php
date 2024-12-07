@@ -4,7 +4,7 @@
 
 @section('content')
 <h1 class="text-3xl font-bold text-blue-800 mb-6">Guia d'Equips</h1>
-<h2><a href="{{ route('equips.create') }}" class="text-red-600 hover:underline">Crear un nou equip</a></h2>
+<h2><a href="{{ route('equips.create') }}" class="bg-blue-500 text-white px-4 py-2 rounded mb-4 inline-block">Crear un nou equip</a></h2>
 <table class="w-full border-collapse border border-gray-300">
     <thead class="bg-gray-200">
     <tr>

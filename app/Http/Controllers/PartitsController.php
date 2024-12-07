@@ -2,21 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Partit;
 use Illuminate\Http\Request;
 
 class PartitsController extends Controller
 {
-    protected $partits = [
-        ['local' => 'Barça Femení', 'visitant' => 'Atlètic de Madrid', 'data' => '2024-11-30', 'resultat' => null],
-        ['local' => 'Real Madrid Femení', 'visitant' => 'Barça Femení', 'data' => '2024-12-15', 'resultat' => '0-3'],
-    ];
-
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $partits = $this->partits;
+        $partits = Partit::paginate(10);
         return view('partits.index', compact('partits'));
     }
 
@@ -25,7 +21,7 @@ class PartitsController extends Controller
      */
     public function create()
     {
-        //
+        return view('partits.create');
     }
 
     /**
@@ -33,38 +29,58 @@ class PartitsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'local' => 'required|string',
+            'visitant' => 'required|string',
+            'data' => 'required|date',
+            'resultat' => 'nullable|string',
+        ]);
+
+        Partit::create($validated);
+
+        return redirect()->route('partits.index')->with('success', 'Partit creat correctament!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Partit $partit)
     {
-        $partit = $this->partits[$id];
         return view('partits.show', compact('partit'));
     }
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Partit $partit)
     {
-        //
+        return view('partits.edit', compact('partit'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Partit $partit)
     {
-        //
+        $validated = $request->validate([
+            'local' => 'required|string',
+            'visitant' => 'required|string',
+            'data' => 'required|date',
+            'resultat' => 'nullable|string',
+        ]);
+
+        $partit->update($validated);
+
+        return redirect()->route('partits.index')->with('success', 'Partit actualitzat correctament!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Partit $partit)
     {
-        //
+        $partit->delete();
+
+        return redirect()->route('partits.index')->with('success', 'Partit esborrat correctament!');
     }
 }
